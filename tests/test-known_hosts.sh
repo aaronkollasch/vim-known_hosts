@@ -9,7 +9,7 @@ VSL="$SCRIPT_DIR/vim-syntax-legend/vim-syntax-legend"
 example_file="$SCRIPT_DIR/known_hosts"
 original_file="$SCRIPT_DIR/known_hosts.vsl"
 changed_file="$SCRIPT_DIR/known_hosts_changed.vsl"
-"$VSL" -t known_hosts -i "$example_file" -o "$changed_file" -p "$original_file"
+"$VSL" -t known_hosts -i "$example_file" -o "$changed_file" -p "$original_file" -r "$SCRIPT_DIR/../"
 retval=$?
 
 # format output
