@@ -3,17 +3,17 @@ Legend:
 
 ! - knownHostsBadLine              " 37
 ? - knownHostsBadMark              " 18
-X - knownHostsBadType              " 118
+X - knownHostsBadType              " 222
 [ - knownHostsBracket              " 14
 # - knownHostsComment              " 297
-. - knownHostsDomain               " 353
+. - knownHostsDomain               " 288
 : - knownHostsGroup                " 7
 = - knownHostsHash                 " 280
 1 - knownHostsHashMag              " 5
 | - knownHostsHashSep              " 15
 , - knownHostsHost                 " 30
 - - knownHostsIPv4                 " 272
-_ - knownHostsIPv6                 " 240
+_ - knownHostsIPv6                 " 201
 \ - knownHostsKey                  " 647
 / - knownHostsKeytype              " 503
 ~ - knownHostsMarker               " 292
@@ -75,7 +75,7 @@ _________________________________ /////// \\\\                       #####
 2001:0db8:85a3:0000:0000::7334 ssh-rsa test                          valid
 ______________________________ /////// \\\\                          #####
 2001:0db8:85a3:0000:0000:8a2e:0370:7334:1234 ssh-rsa test            not valid
-_______________________________________XXXXX /////// \\\\            ### #####
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX /////// \\\\            ### #####
 @revoked 10.10.10.*,10.*.*.* ssh-rsa asdfsasdfsdf
 ~~~~~~~~ ---------*,---*-*-* /////// \\\\\\\\\\\\
 @revoked www.example.com,[10.10.10.*]:19,10.*.*.* ssh-rsa asdfsasdfsdf
@@ -93,19 +93,19 @@ _______________________________________XXXXX /////// \\\\            ### #####
 @revoked example.local ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 ~~~~~~~~ ............. /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local[123]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
-~~~~~~~~ .............XXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
+~~~~~~~~ XXXXXXXXXXXXXXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local[asdf]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
-~~~~~~~~ .............XXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
+~~~~~~~~ XXXXXXXXXXXXXXXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local,[123]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
-~~~~~~~~ .............XXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
+~~~~~~~~ XXXXXXXXXXXXXXXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local,[123.as]: ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
-~~~~~~~~ .............XXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
+~~~~~~~~ XXXXXXXXXXXXXXXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local,[123.as]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 ~~~~~~~~ .............,[......[:ppp /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local,[123.1.1.1]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 ~~~~~~~~ .............,[---------[:ppp /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @revoked example.local:123,example.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
-~~~~~~~~ .............XXXXXXXXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
+~~~~~~~~ XXXXXXXXXXXXXXXXXXXXXXXXXXXXX /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @asdf asdf.tld ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 ????? ........ /////////////////// \\\\\\\\\\\\\\\\\\\\\\\\\
 @aAad#df example.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=

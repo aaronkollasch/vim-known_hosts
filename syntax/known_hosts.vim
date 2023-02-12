@@ -36,7 +36,7 @@ let s:portPat   = "\\d\\+"
 let s:hostPat   = "!\\?\\(" . s:domainPat . "\\|" . s:ipv4Pat . "\\|" . s:ipv6Pat . "\\|\\*\\)"
 let s:hostPortPat = "\\[" . s:hostPat . "\\]:" . s:portPat
 let s:hostsPat = "\\%(" . s:hostPat . ",\\|" . s:hostPortPat . ",\\)*\\%(" . s:hostPat . "\\|" . s:hostPortPat . "\\)"
-let s:fullHostsPat = "/^\\(@[^ ]\\+\\s\\+\\)\\?" . s:hostsPat . '/'
+let s:fullHostsPat = "/^\\(@[^ ]\\+\\s\\+\\)\\?" . s:hostsPat . "\\s\\+/"
 let s:hostPortPat = "/" . s:hostPortPat . "/"
 let s:hostPat = "/" . s:hostPat . "/"
 let s:ipv4Pat = "/" . s:ipv4Pat . "/"
@@ -67,7 +67,7 @@ syn keyword knownHostsMarker  contained @cert-authority @revoked
 " Match a line with hashed hostname
 syn match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
 syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+" contains=knownHostsBadMark,knownHostsHash,knownHostsKeytype
-syn match   knownHostsHash    contained "|[^ ]\+" keepend contains=knownHostsHashMag,knownHostsHashSep
+syn match   knownHostsHash    contained "\s\?|[^ ]\+\s\+" keepend contains=knownHostsHashMag,knownHostsHashSep
 syn match   knownHostsHashSep contained "|" keepend
 syn match   knownHostsHashMag contained "|\d\+|" keepend contains=knownHostsHashSep
 
