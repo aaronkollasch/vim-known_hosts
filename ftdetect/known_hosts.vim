@@ -12,4 +12,4 @@ if &compatible || version < 600
 endif
 
 " Known_hosts
-au BufNewFile,BufRead known_hosts set filetype=known_hosts
+au BufNewFile,BufRead known_hosts,known_hosts2,*ssh/known_hosts* set filetype=known_hosts

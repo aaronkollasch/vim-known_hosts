@@ -2,8 +2,11 @@
 "
 " Language:     OpenSSH known_hosts (known_hosts)
 " Author:       Camille Moncelier <moncelier@devlife.org>
+" Author:       Aaron Kollasch <aaron@kollasch.dev>
 " Copyright:    Copyright (C) 2010 Camille Moncelier <moncelier@devlife.org>
+" Copyright:    Modified work Copyright (C) 2023 Aaron Kollasch <aaron@kollasch.dev>
 " Licence:      You may redistribute this under the same terms as Vim itself
+" URL:          https://github.com/aaronkollasch/vim-known_hosts
 "
 " This sets up the syntax highlighting for known_host file
 
@@ -17,16 +20,56 @@ else
 endif
 
 if version >= 600
-    setlocal iskeyword=_,-,a-z,A-Z,48-57
+    setlocal iskeyword=_,-,a-z,A-Z,48-57,@-@
+    setlocal commentstring=#\ %s
 else
-    set iskeyword=_,-,a-z,A-Z,48-57
+    set iskeyword=_,-,a-z,A-Z,48-57,@-@
+    set commentstring=#\ %s
 endif
 
 syn case ignore
 
-syn keyword knownHostsKeyword ssh-rsa ssh-dsa ssh-dss ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519
-syn match   knownHostsHost    "^[^ ]\+" 
-syn match   knownHostsKey     "[^ ]\+$"
+let s:ipv4Pat   = "\\%(\\%(25[0-5?]\\|2[0-4?][0-9?]\\|[01?]\\?[0-9?]\\?[0-9?]\\|\\*\\)\\.\\)\\{3\\}\\%(25\\_[0-5?]\\|2[0-4?]\\_[0-9?]\\|[01?]\\?[0-9?]\\?\\_[0-9?]\\|\\*\\)"
+let s:ipv6Pat   = "\\%([a-fA-F0-9*?]*:\\)\\{2,7}[a-fA-F0-9*?]\\+"
+let s:domainPat = "-\\@![A-Za-z0-9-*?]\\+\\%([\\-\\.]\\{1}[a-z0-9*?]\\+\\)*\\.\\%(\\*\\|[A-Za-z]\\{2,6}\\)"
+let s:portPat   = "\\d\\+"
+let s:hostPat   = "!\\?\\(" . s:domainPat . "\\|" . s:ipv4Pat . "\\|" . s:ipv6Pat . "\\|\\*\\)"
+let s:hostPortPat = "\\[" . s:hostPat . "\\]:" . s:portPat
+let s:hostsPat = "\\%(" . s:hostPat . ",\\|" . s:hostPortPat . ",\\)*\\%(" . s:hostPat . "\\|" . s:hostPortPat . "\\)"
+let s:fullHostsPat = "/^\\(@[^ ]\\+\\s\\+\\)\\?" . s:hostsPat . '/'
+let s:hostPortPat = "/" . s:hostPortPat . "/"
+let s:hostPat = "/" . s:hostPat . "/"
+let s:ipv4Pat = "/" . s:ipv4Pat . "/"
+let s:ipv6Pat = "/" . s:ipv6Pat . "/"
+let s:portPat = "/" . s:portPat . "/"
+
+" Match comments and bad lines
+syn match   knownHostsComment ".*$"
+syn match   knownHostsBadLine "^.*$"
+syn match   knownHostsComment "#.*$"
+
+" Match a line
+syn match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
+syn match   knownHostsKey     contained "[^ ]\+" keepend
+syn match   knownHostsWild    contained "[*?!]"
+autocmd Syntax * exe "syn match   knownHostsHost    contained" s:fullHostsPat "contains=knownHostsBadMark,knownHostsGroup,knownHostsDomain"
+syn match   knownHostsBadMark contained "^@[^ ]\+" contains=knownHostsMarker
+syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+" contains=knownHostsHost,knownHostsKeytype,knownHostsBadMark
+syn keyword knownHostsKeytype contained nextgroup=knownHostsKey ssh-rsa ssh-dsa ssh-dss ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519
+autocmd Syntax * exe "syn match   knownHostsGroup   contained" s:hostPortPat  "contains=knownHostsBracket,knownHostsPort keepend"
+autocmd Syntax * exe "syn match   knownHostsPort    contained" s:portPat      "keepend contains=knownHostsWild"
+autocmd Syntax * exe "syn match   knownHostsIPv4    contained" s:ipv4Pat      "contains=knownHostsWild"
+autocmd Syntax * exe "syn match   knownHostsIPv6    contained" s:ipv6Pat      "contains=knownHostsWild"
+autocmd Syntax * exe "syn match   knownHostsDomain  contained" s:hostPat      "keepend contains=knownHostsWild,knownHostsIPv4,knownHostsIPv6"
+syn region  knownHostsBracket contained start="\[" end="\]" contains=knownHostsDomain keepend transparent
+syn keyword knownHostsMarker  contained @cert-authority @revoked
+
+" Match a line with hashed hostname
+syn match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
+syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+" contains=knownHostsBadMark,knownHostsHash,knownHostsKeytype
+syn match   knownHostsHash    contained "|[^ ]\+" keepend contains=knownHostsHashMag,knownHostsHashSep
+syn match   knownHostsHashSep contained "|" keepend
+syn match   knownHostsHashMag contained "|\d\+|" keepend contains=knownHostsHashSep
 
 " Define the default highlighting
 if version >= 508 || !exists("did_known_hosts_syntax_inits")
@@ -37,9 +80,23 @@ if version >= 508 || !exists("did_known_hosts_syntax_inits")
         command -nargs=+ HiLink hi def link <args>
     endif
 
-    HiLink knownHostsKeyword Keyword
-    HiLink knownHostsHost    Identifier
+    HiLink knownHostsKeytype Keyword
+    HiLink knownHostsHost    Delimiter
+    HiLink knownHostsGroup   Delimiter
+    HiLink knownHostsHash    Identifier
+    HiLink knownHostsHashSep Delimiter
+    HiLink knownHostsHashMag Number
+    HiLink knownHostsDomain  Identifier
+    HiLink knownHostsBadMark Error
+    HiLink knownHostsBadLine Error
+    HiLink knownHostsBadType Error
+    HiLink knownHostsMarker  Keyword
+    HiLink knownHostsPort    Number
+    HiLink knownHostsIPv4    Constant
+    HiLink knownHostsIPv6    Constant
     HiLink knownHostsKey     String
+    HiLink knownHostsWild    Operator
+    HiLink knownHostsComment Comment
 
     delcommand HiLink
 endif
