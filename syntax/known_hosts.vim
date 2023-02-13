@@ -35,9 +35,9 @@ let s:domainPat = "-\\@![A-Za-z0-9-*?]\\+\\%([\\-\\.]\\{1}[a-z0-9*?]\\+\\)*\\.\\
 let s:portPat   = "\\d\\+"
 let s:hostPat   = "!\\?\\(" . s:domainPat . "\\|" . s:ipv4Pat . "\\|" . s:ipv6Pat . "\\|\\*\\)"
 let s:hostPortPat = "\\[" . s:hostPat . "\\]:" . s:portPat
-let s:hostsPat = "\\%(" . s:hostPat . ",\\|" . s:hostPortPat . ",\\)*\\%(" . s:hostPat . "\\|" . s:hostPortPat . "\\)"
-let s:fullHostsPat = "/^\\(@[^ ]\\+\\s\\+\\)\\?" . s:hostsPat . "\\s\\+/"
+let s:anyHostPat = "\\%(" . s:hostPat . "\\|" . s:hostPortPat . "\\)"
 let s:hostPortPat = "/" . s:hostPortPat . "/"
+let s:anyHostPat = "/" . s:anyHostPat . "/"
 let s:hostPat = "/" . s:hostPat . "/"
 let s:ipv4Pat = "/" . s:ipv4Pat . "/"
 let s:ipv6Pat = "/" . s:ipv6Pat . "/"
@@ -51,11 +51,13 @@ syn match   knownHostsComment "#.*$"
 " Match a line
 syn match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
 syn match   knownHostsKey     contained "[^ ]\+" keepend
-syn match   knownHostsWild    contained "[*?!]"
-autocmd Syntax * exe "syn match   knownHostsHost    contained" s:fullHostsPat "contains=knownHostsBadMark,knownHostsGroup,knownHostsDomain"
-syn match   knownHostsBadMark contained "^@[^ ]\+" contains=knownHostsMarker
-syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+" contains=knownHostsHost,knownHostsKeytype,knownHostsBadMark
 syn keyword knownHostsKeytype contained nextgroup=knownHostsKey ssh-rsa ssh-dsa ssh-dss ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519
+syn match   knownHostsWild    contained "[*?!]"
+syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+" contains=knownHostsAllHost,knownHostsKeytype,knownHostsBadMark
+syn match   knownHostsBadHost contained "[^ ,]\+" contains=knownHostsHost
+syn match   knownHostsBadMark contained "^@[^ ]\+" contains=knownHostsMarker
+syn match   knownHostsAllHost contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+" contains=knownHostsBadMark,knownHostsBadHost,knownHostsMarker
+autocmd Syntax * exe "syn match   knownHostsHost    contained" s:anyHostPat "contains=knownHostsGroup,knownHostsDomain"
 autocmd Syntax * exe "syn match   knownHostsGroup   contained" s:hostPortPat  "contains=knownHostsBracket,knownHostsPort keepend"
 autocmd Syntax * exe "syn match   knownHostsPort    contained" s:portPat      "keepend contains=knownHostsWild"
 autocmd Syntax * exe "syn match   knownHostsIPv4    contained" s:ipv4Pat      "contains=knownHostsWild"
@@ -81,6 +83,7 @@ if version >= 508 || !exists("did_known_hosts_syntax_inits")
     endif
 
     HiLink knownHostsKeytype Keyword
+    HiLink knownHostsAllHost Delimiter
     HiLink knownHostsHost    Delimiter
     HiLink knownHostsGroup   Delimiter
     HiLink knownHostsHash    Identifier
@@ -88,6 +91,7 @@ if version >= 508 || !exists("did_known_hosts_syntax_inits")
     HiLink knownHostsHashMag Number
     HiLink knownHostsDomain  Identifier
     HiLink knownHostsBadMark Error
+    HiLink knownHostsBadHost Error
     HiLink knownHostsBadLine Error
     HiLink knownHostsBadType Error
     HiLink knownHostsMarker  Keyword
