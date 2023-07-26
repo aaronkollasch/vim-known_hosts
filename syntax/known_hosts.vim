@@ -57,12 +57,12 @@ syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+"
 syn match   knownHostsBadHost contained "[^ ,]\+" contains=knownHostsHost
 syn match   knownHostsBadMark contained "^@[^ ]\+" contains=knownHostsMarker
 syn match   knownHostsAllHost contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+" contains=knownHostsBadMark,knownHostsBadHost,knownHostsMarker
-autocmd Syntax * exe "syn match   knownHostsHost    contained" s:anyHostPat "contains=knownHostsGroup,knownHostsDomain"
-autocmd Syntax * exe "syn match   knownHostsGroup   contained" s:hostPortPat  "contains=knownHostsBracket,knownHostsPort keepend"
-autocmd Syntax * exe "syn match   knownHostsPort    contained" s:portPat      "keepend contains=knownHostsWild"
-autocmd Syntax * exe "syn match   knownHostsIPv4    contained" s:ipv4Pat      "contains=knownHostsWild"
-autocmd Syntax * exe "syn match   knownHostsIPv6    contained" s:ipv6Pat      "contains=knownHostsWild"
-autocmd Syntax * exe "syn match   knownHostsDomain  contained" s:hostPat      "keepend contains=knownHostsWild,knownHostsIPv4,knownHostsIPv6"
+exe "syn match   knownHostsHost    contained" s:anyHostPat   "contains=knownHostsGroup,knownHostsDomain"
+exe "syn match   knownHostsGroup   contained" s:hostPortPat  "contains=knownHostsBracket,knownHostsPort keepend"
+exe "syn match   knownHostsPort    contained" s:portPat      "contains=knownHostsWild keepend"
+exe "syn match   knownHostsIPv4    contained" s:ipv4Pat      "contains=knownHostsWild"
+exe "syn match   knownHostsIPv6    contained" s:ipv6Pat      "contains=knownHostsWild"
+exe "syn match   knownHostsDomain  contained" s:hostPat      "contains=knownHostsWild,knownHostsIPv4,knownHostsIPv6 keepend"
 syn region  knownHostsBracket contained start="\[" end="\]" contains=knownHostsDomain keepend transparent
 syn keyword knownHostsMarker  contained @cert-authority @revoked
 
