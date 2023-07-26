@@ -44,34 +44,34 @@ let s:ipv6Pat = "/" . s:ipv6Pat . "/"
 let s:portPat = "/" . s:portPat . "/"
 
 " Match comments and bad lines
-syn match   knownHostsComment ".*$"
-syn match   knownHostsBadLine "^.*$"
-syn match   knownHostsComment "#.*$"
+syn      match   knownHostsComment ".*$"
+syn      match   knownHostsBadLine "^.*$"
+syn      match   knownHostsComment "#.*$"
 
 " Match a line
-syn match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
-syn match   knownHostsKey     contained "[^ ]\+" keepend
-syn keyword knownHostsKeytype contained nextgroup=knownHostsKey ssh-rsa ssh-dsa ssh-dss ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519
-syn match   knownHostsWild    contained "[*?!]"
-syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+" contains=knownHostsAllHost,knownHostsKeytype,knownHostsBadMark
-syn match   knownHostsBadHost contained "[^ ,]\+" contains=knownHostsHost
-syn match   knownHostsBadMark contained "^@[^ ]\+" contains=knownHostsMarker
-syn match   knownHostsAllHost contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+" contains=knownHostsBadMark,knownHostsBadHost,knownHostsMarker
+syn      match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
+syn      match   knownHostsKey     contained "[^ ]\+" keepend
+syn      keyword knownHostsKeytype contained nextgroup=knownHostsKey ssh-rsa ssh-dsa ssh-dss ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519
+syn      match   knownHostsWild    contained "[*?!]"
+syn      match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+[^ ]\+" contains=knownHostsAllHost,knownHostsKeytype,knownHostsBadMark
+syn      match   knownHostsBadHost contained "[^ ,]\+" contains=knownHostsHost
+syn      match   knownHostsBadMark contained "^@[^ ]\+" contains=knownHostsMarker
+syn      match   knownHostsAllHost contained "^\(@[^ ]\+\s\+\)\?[^ @][^ ]*\s\+" contains=knownHostsBadMark,knownHostsBadHost,knownHostsMarker
 exe "syn match   knownHostsHost    contained" s:anyHostPat   "contains=knownHostsGroup,knownHostsDomain"
 exe "syn match   knownHostsGroup   contained" s:hostPortPat  "contains=knownHostsBracket,knownHostsPort keepend"
 exe "syn match   knownHostsPort    contained" s:portPat      "contains=knownHostsWild keepend"
 exe "syn match   knownHostsIPv4    contained" s:ipv4Pat      "contains=knownHostsWild"
 exe "syn match   knownHostsIPv6    contained" s:ipv6Pat      "contains=knownHostsWild"
 exe "syn match   knownHostsDomain  contained" s:hostPat      "contains=knownHostsWild,knownHostsIPv4,knownHostsIPv6 keepend"
-syn region  knownHostsBracket contained start="\[" end="\]" contains=knownHostsDomain keepend transparent
-syn keyword knownHostsMarker  contained @cert-authority @revoked
+syn      region  knownHostsBracket contained start="\[" end="\]" contains=knownHostsDomain keepend transparent
+syn      keyword knownHostsMarker  contained @cert-authority @revoked
 
 " Match a line with hashed hostname
-syn match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
-syn match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+" contains=knownHostsBadMark,knownHostsHash,knownHostsKeytype
-syn match   knownHostsHash    contained "\s\?|[^ ]\+\s\+" keepend contains=knownHostsHashMag,knownHostsHashSep
-syn match   knownHostsHashSep contained "|" keepend
-syn match   knownHostsHashMag contained "|\d\+|" keepend contains=knownHostsHashSep
+syn      match   knownHostsLine    "^#\@!\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+\s\+[^ ]\+" transparent contains=knownHostsBadType,knownHostsKey nextgroup=knownHostsComment
+syn      match   knownHostsBadType contained "^\(@[^ ]\+\s\+\)\?|[^ ]*\s\+[^ ]\+" contains=knownHostsBadMark,knownHostsHash,knownHostsKeytype
+syn      match   knownHostsHash    contained "\s\?|[^ ]\+\s\+" keepend contains=knownHostsHashMag,knownHostsHashSep
+syn      match   knownHostsHashSep contained "|" keepend
+syn      match   knownHostsHashMag contained "|\d\+|" keepend contains=knownHostsHashSep
 
 " Define the default highlighting
 if version >= 508 || !exists("did_known_hosts_syntax_inits")
