@@ -2,7 +2,7 @@
 set -euxo pipefail
 command -v grealpath &>/dev/null && REALPATH=grealpath || REALPATH=realpath
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd -P )"
-SCRIPT_DIR="$($REALPATH --relative-to="." "$SCRIPT_DIR")"
+SCRIPT_DIR="$($REALPATH --relative-to="." "$SCRIPT_DIR")" || { echo "GNU realpath not present" >&2; exit 1; }
 VSL="$SCRIPT_DIR/vim-syntax-legend/vim-syntax-legend"
 
 # test known_hosts syntax
