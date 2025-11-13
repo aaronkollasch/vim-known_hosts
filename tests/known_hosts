@@ -26,9 +26,9 @@ asdf.local badtype asdfsasdfsdf comment words
 2001:0db8:85a3:0000:0000::7334 ssh-rsa test                          valid
 2001:0db8:85a3:0000:0000:8a2e:0370:7334:1234 ssh-rsa test            not valid
 @revoked 10.10.10.*,10.*.*.* ssh-rsa asdfsasdfsdf
-@revoked www.example.com,[10.10.10.*]:19,10.*.*.* ssh-rsa asdfsasdfsdf
-@revoked 140.82.1??.?,140.82.1??.??,140.82.1??.???,192.30.25?.?,192.30.25?.??,192.30.25?.???,185.199.1??.?,185.199.1??.??,185.199.1??.??? ssh-rsa 123jj
-140.82.1??.?,140.82.1??.??,140.82.1??.???,192.30.25?.?,192.30.25?.??,192.30.25?.???,185.199.1??.?,185.199.1??.??,185.199.1??.??? ssh-rsa 123jj
+@revoked www.example.com,[10.10.10.*]:19,10.*.*.*,[192.168.*.*]:* ssh-rsa asdfsasdfsdf
+@revoked 140.82.1??.?,140.82.1??.??,140.82.1??.???,192.30.25?.?,192.30.25?.??,[192.30.25?.???]:50???,185.199.1??.?,[185.199.1??.??]:555555,185.199.1??.??? ssh-rsa 123jj
+140.82.1??.?,[140.82.1??.??]:????,140.82.1??.???,192.30.25?.?,192.30.25?.??,192.30.25?.???,185.199.1??.?,185.199.1??.??,185.199.1??.??? ssh-rsa 123jj
 @cert-authority domain.local,domain2.local ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @cert-authority server0?.domain.local ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @cert-authority longdomain.reallylongdomain.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
@@ -39,7 +39,7 @@ asdf.local badtype asdfsasdfsdf comment words
 @revoked example.local,[123.as]: ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @revoked example.local,[123.as]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @revoked example.local,[123.1.1.1]:123 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
-@revoked example.local:123,example.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
+@revoked example.local:123,example.com,[example.lan]:* ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @asdf asdf.tld ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @aAad#df example.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlz=
 @revoked !10.10.1.1 ssh-rsa asdf

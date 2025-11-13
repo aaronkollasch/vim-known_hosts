@@ -32,7 +32,7 @@ syn case ignore
 let s:ipv4Pat   = "\\%(\\%(25[0-5?]\\|2[0-4?][0-9?]\\|[01?]\\?[0-9?]\\?[0-9?]\\|\\*\\)\\.\\)\\{3\\}\\%(25\\_[0-5?]\\|2[0-4?]\\_[0-9?]\\|[01?]\\?[0-9?]\\?\\_[0-9?]\\|\\*\\)"
 let s:ipv6Pat   = "\\%([a-fA-F0-9*?]*:\\)\\{2,7}[a-fA-F0-9*?]\\+"
 let s:domainPat = "-\\@![A-Za-z0-9-*?]\\+\\%([\\-\\.]\\{1}[a-z0-9*?]\\+\\)*\\.\\%(\\*\\|[A-Za-z]\\{2,6}\\)"
-let s:portPat   = "\\d\\+"
+let s:portPat   = "[0-9*?]\\{1,5}"
 let s:hostPat   = "!\\?\\(" . s:domainPat . "\\|" . s:ipv4Pat . "\\|" . s:ipv6Pat . "\\|\\*\\)"
 let s:hostPortPat = "\\[" . s:hostPat . "\\]:" . s:portPat
 let s:anyHostPat = "\\%(" . s:hostPat . "\\|" . s:hostPortPat . "\\)"
